@@ -1,0 +1,21 @@
+.sidebar {
+position: fixed;left:0;top:0;width:280px;bottom:0;
+padding-top: 15px;padding-left:5px;padding-right:5px;
+border-right:1px solid rgba(0,0,0,0.15)
+}
+
+.mainbar{
+  padding-left:280px;
+}
+table.form {
+  width:100%;
+}
+
+table.form tr td {padding:5px }
+
+
+.mainBar{ padding-left:300px;padding-top:35px }
+.mainBar .tab{ display: none;pointer-events: none}
+.mainBar .tab.afficher{ display: block;pointer-events: auto}
+
+    img{width:200px;}

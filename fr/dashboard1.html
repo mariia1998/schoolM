@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="../node_modules/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/gep.css">
+  <link rel="stylesheet" href="../node_modules/font-awesome/css/font-awesome.min.css">
+    <title>dashboard1</title>
+  </head>
+  <body>
+
+    <div class="sidebar" style="background:bg-dark; top:56px">
+    <input type="text" id="recherche" class="form-control" name="" value="" placeholder="Rechercher..">
+  <hr>
+
+    <div class="list-group" style="background-color: : grey ">
+      <a href="#" class="list-group-item list-group-item-action "><span><i class="fa fa-users"></i></span>corp professionnel</a>
+      <a href="#" class="list-group-item list-group-item-action "><span><i class="fa fa-user"></i></span>parents</a>
+      <a href="#" class="list-group-item list-group-item-action "><span><i class="fa fa-clipboard"></i></span>registre des classes</a>
+      <a href="#" class="list-group-item list-group-item-action "><span><i class="fa fa-pencil"></i></span>matieres </a>
+      <a href="#" class="list-group-item list-group-item-action "><span><i class="fa fa-calendar"></i></span>Emploie du temps </a>
+      <a href="#" class="list-group-item list-group-item-action "><span><i class="fa fa-check"></i></span>registre d'abscences</a>
+      <a href="#" class="list-group-item list-group-item-action "><span><i class="fa fa-dollar"></i></span>Recette</a>
+
+      <a href="#" class="list-group-item list-group-item-action list-group-item-dark"><span><i class="fa fa-bell"></i></span>notification</a>
+    </div>
+
+    </div>
+
+
+
+
+    <div class="container-fluid" style="padding-left:300px;padding-top:15px">
+
+
+    <div class="row">
+
+
+      <div class="col col-3">
+      <div class="card  text-white">
+        <div class="card-header" style="color:#1e88e5">
+    <span><i class="fa fa-book"></i></span>
+       SEANCES
+        </div>
+        <div class="card-body  nombreDesSeances" style="background-color:#1e88e5 ">
+          <div class="spinner-border" role="status" id='auj'>  </div>
+          <div class="spinner-border spinner-sm" role="status" style=":10px;float:right;bottom:0" id='tot'>  </div>
+
+
+        </div>
+      </div>
+      </div>
+
+
+
+
+    <div class="col col-3">
+    <div class="card  text-white " >
+      <div class="card-header" style="color:#66bb6a">
+        <span><i class="fa fa-graduation-cap"></i></span>
+    ETUDIANTS
+      </div>
+      <div class="card-body admin nombreDesEtudiants" style="background-color:#66bb6a">
+        <div class="spinner-border" role="status">  </div>
+      </div>
+    </div>
+    </div>
+
+    <div class="col col-3">
+      <div class="card  text-white"  >
+        <div class="card-header" style="color:#ffa726">
+          <span><i class="fa fa-user"></i></span>
+    PROFS
+      </div>
+
+      <div class="card-body  admin nombreDesProfs" style="background-color:#ffb74d ;">
+        <div class="spinner-border" role="status">  </div>
+      </div>
+
+    </div>
+    </div>
+
+    <div class="col col-3">
+      <div class="card  text-white"  >
+        <div class="card-header" style="color:#c62828">
+          <span><i class="fa fa-users	"></i></span>
+
+    GROUPES
+      </div>
+
+      <div class="card-body admin nombreDesGroupes" style="background-color:#FF5252">
+         <div class="spinner-border" role="status">  </div>
+      </div>
+
+    </div>
+    </div>
+    <hr>
+
+<div class="col-6">
+  <div class="card" style="top:20px">
+<div class="card-header">male/female</div>
+<div class="card-body">
+  <canvas id="myChart" width="100%" height="100"></canvas>
+
+</div>
+  </div>
+</div>
+<div class="col-6" style="top:20px" >
+<div class="card">
+  <div class="card-header">staff</div>
+  <div class="card-body">
+    <canvas id="myChart2" width="100%" height="100"></canvas>
+
+</div>
+</div>
+</div>
+
+    </div>
+  </body>
+<script src="gep.js" charset="utf-8"></script>
+  <script type="text/javascript">
+let Chart = require('chart.js') , moment = require('moment');
+
+function mf (m,f){
+  var ctx = document.getElementById('myChart');
+  var myChart = new Chart(ctx, {
+      type: 'pie',
+      data: {
+          labels: ['f','m'],
+          datasets: [{
+              label: '# of Votes',
+              data: [m, f],
+              backgroundColor: [
+                  'rgba(255, 99, 132, 0.2)',
+                  'rgba(0, 64, 255, 1)',
+              ],
+              borderColor: [
+                  'rgba(255, 99, 132, 1)',
+                  'rgba(54, 162, 235, 1)',
+              ],
+              borderWidth: 1
+          }]
+      },
+      options: {
+          scales: {
+              yAxes: [{
+                  ticks: {
+                      beginAtZero: true
+                  }
+              }]
+          }
+      }
+  });
+}
+
+var ctx2 = document.getElementById('myChart2');
+
+var myDoughnutChart = new Chart(ctx2, {
+    type: 'doughnut',
+    data: {
+        labels: ['prof','parent','etudiant'],
+        datasets: [{
+            label: '# of Votes',
+            data: [50, 1300,2000],
+            backgroundColor: [
+                'rgba(255, 99, 132, 0.2)',
+                'rgba(0, 64, 255, 1',
+            ],
+            borderColor: [
+                'rgba(255, 99, 132, 1)',
+                'rgba(0, 34, 66, 0.85)',
+            ],
+            borderColor: [
+                'rgba(255, 99, 132, 1)',
+                'rgba(54, 162, 235, 1)',
+            ],
+            borderWidth: 1
+        }]
+    },
+    options: {
+        scales: {
+            yAxes: [{
+                ticks: {
+                    beginAtZero: true
+                }
+            }]
+        }
+    }
+  });
+
+let te = moment().format('E');
+console.log(te);
+
+  query("SELECT COUNT(id) AS auj  from seances WHERE jour = '"+te+ "'  ",function(d){
+    console.log(d);
+    document.getElementById('auj').outerHTML='<h1 align="center">'+d[0].auj+'</h1>';
+
+  })
+
+
+    query("SELECT COUNT(id) AS tot  from seances  ",function(d){
+      console.log(d);
+      document.getElementById('tot').outerHTML='<h5 align="left"> total:'+d[0].tot+'</h5>';
+
+    })
+
+
+
+
+
+  </script>
+</html>

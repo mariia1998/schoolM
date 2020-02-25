@@ -1,0 +1,23 @@
+{
+  "name": "gep",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bootstrap": "^4.4.1",
+    "chart.js": "^2.9.3",
+    "express": "^4.17.1",
+    "font-awesome": "^4.7.0",
+    "moment": "^2.24.0",
+    "mysql": "^2.18.1",
+    "sweetalert2": "^9.7.2"
+  },
+  "devDependencies": {
+    "faker": "^4.1.0"
+  }
+}

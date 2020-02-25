@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="../node_modules/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/gep.css">
+    <link rel="stylesheet" href="../node_modules/font-awesome/css/font-awesome.min.css">
+    <title>eleves</title>
+  </head>
+  <style>
+  .win { position: fixed;left:280px;top:-100vw ;right:0;bottom:100vh;z-index: 10;background-color: #fff}
+  .win.afficher {top:0;z-index: 9 ; bottom: 0;}
+.win , .win.afficher {transition: all 0.5s ease}
+  </style>
+  <body>
+
+
+
+    <div class="win ">
+<div style="width:600px;margin:20px auto;">
+<form class="add" >
+
+      <table class="form" method="post">
+        <thead>
+
+        </thead>
+
+        <tbody>
+          <tr>
+            <td>nom</td>
+            <td>  <input type="text" class="form-control" name="nom"  placeholder="nom"></td>
+          </tr>
+          <tr>
+            <td>prenom</td>
+            <td><input type="text" class="form-control" name="prenom" placeholder="prenom"></td>
+          </tr>
+          <tr>
+            <td>adresse</td>
+            <td><input type="text" class="form-control" name="adresse" placeholder="adresse"></td>
+          </tr>
+
+          <tr>
+            <td>année</td>
+            <td> <input type="text" class="form-control" name="annee" placeholder="année"></td>
+          </tr>
+          <tr>
+            <td>Date de naissance</td>
+            <td><input type="date" class="form-control" name="date_naissance" placeholder="Date de naissance"></td>
+          </tr>
+          <tr>
+            <td>telephone</td>
+            <td><input type="text" class="form-control" name="tel" placeholder="telephone"></td>
+          </tr><tr>
+            <td>nom du parent</td>
+            <td><input type="text" class="form-control" name="nom_parent" placeholder="nom_parent"></td>
+          </tr><tr>
+            <td>groupe</td>
+            <td><select class="form-control" name="id_groupe">
+              <option value="0">grp1</option>
+
+            </select></td>
+          </tr>
+        </tbody>
+        <tr>
+          <td></td>
+          <td>
+          <button type="submit"   class="btn btn-block btn-primary  " style="width:100%" >Submit</button></td>
+        </tr>
+      </table>
+    </form>
+
+ </div>
+
+    </div>
+<div class="sidebar">
+<input type="text" id="recherche" class="form-control" name="" value="" placeholder="Rechercher..">
+
+<hr>
+<div class=" text-center">
+  <h2 id="sum">0</h2>
+</div>
+<hr>
+<select class="custom-select form-control" id="filterBygroup">
+  <option selected>Filtrer par groupe</option>
+  <option value="1">One</option>
+  <option value="2">Two</option>
+  <option value="3">Three</option>
+</select>
+
+
+<br>
+<br>
+
+
+<select class="custom-select form-control" id="filterByyear">
+  <option selected>Filtrer par année</option>
+  <option value="1">One</option>
+  <option value="2">Two</option>
+  <option value="3">Three</option>
+</select>
+
+<hr>
+
+<button type="button" name="button" onclick="table.idact=0;document.querySelector('.win').classList.toggle('afficher')" class="btn btn-block btn-primary"><i class="fa fa-plus"></i></button>
+<button type="button" name="button" id="editer" class="btn btn-block btn-warning"><i class="fa fa-edit"></i></button>
+<button type="button" name="button" id='supp' class="btn btn-block btn-danger"><i class="fa fa-delete"></i></button>
+
+</div>
+<div class="mainbar">
+
+
+<h1 class="text-center">Liste des élèves </h1>
+<table class="table table-striped  table-bordered">
+  <thead>
+    <tr>
+      <th>N</th>
+      <th>nom</th>
+      <th>prenom</th>
+      <th>Année</th>
+      <th>Date de Naissance</th>
+      <th>adresse</th>
+      <th>Telephone</th>
+      <th>parent</th>
+        <th>Groupe</th>
+    </tr>
+  </thead>
+  <tbody id="res">
+
+  </tbody>
+</table>
+</div>
+
+  </body>
+  <script src="gep.js" charset="utf-8"></script>
+  <script type="text/javascript">
+  let obj = ['nom','prenom','annee','date_naissance','adresse','tel','nom_parent','id_groupe'];
+ // table.init("eleves",'res','recherche',obj)
+
+ table.init({
+   nom_table : 'eleves',
+idt : 'res',
+recherche : 'recherche',
+obj : obj,
+supp : 'supp' ,
+sum : 'sum' ,
+editer : 'editer' ,
+filters : [
+  {id:'filterBygroup',name:'id_groupe'},
+  {id:'filterByyear',name:'annee'},
+]
+});
+
+
+
+
+
+document.querySelector('.add').addEventListener('submit',function(e){
+e.preventDefault();
+let form = this;
+var data = serialize(form);
+console.log(data);
+let keys =[] , values =[], update=[];
+data.forEach(function(x){
+    keys.push(x[0]);
+    values.push("'"+x[1]+"'");
+    update.push(x[0]+'="'+x[1]+'"');
+})
+
+console.log(keys);
+console.log(values);
+ if (table.idact == 0) {
+
+  query("INSERT INTO "+table.nom_table+" ("+keys.join(',')+") VALUES ("+values.join(',')+")",function(r){
+    console.log(r);
+    table.init();
+    table.idact=0;
+    document.querySelector('.win').classList.remove('afficher')
+    form.reset()
+  })
+} else {
+  query("UPDATE "+table.nom_table+" SET "+update.join(',')+" WHERE id= "+table.idact+"",function () {
+    table.init();
+    document.querySelector('.win').classList.remove('afficher')
+    table.idact=0;
+      form.reset();
+  })
+}
+
+
+
+
+})
+
+
+
+
+
+function serialize (form) {
+    if (!form || form.nodeName !== "FORM") {
+            return;
+    }
+    var i, j, q = [];
+    for (i = form.elements.length - 1; i >= 0; i = i - 1) {
+        if (form.elements[i].name === "") {
+            continue;
+        }
+        switch (form.elements[i].nodeName) {
+            case 'INPUT':
+                switch (form.elements[i].type) {
+                    case 'text':
+                    case 'tel':
+                    case 'email':
+                    case 'date':
+                    case 'hidden':
+                    case 'password':
+                    case 'button':
+                    case 'reset':
+                    case 'submit':
+                        q.push([form.elements[i].name , encodeURIComponent(form.elements[i].value)]);
+                        break;
+                    case 'checkbox':
+                    case 'radio':
+                        if (form.elements[i].checked) {
+                                q.push([form.elements[i].name , encodeURIComponent(form.elements[i].value)]);
+                        }
+                        break;
+                }
+                break;
+                case 'file':
+                break;
+            case 'TEXTAREA':
+                    q.push([form.elements[i].name, encodeURIComponent(form.elements[i].value)]);
+                    break;
+            case 'SELECT':
+                switch (form.elements[i].type) {
+                    case 'select-one':
+                        q.push([form.elements[i].name, encodeURIComponent(form.elements[i].value)]);
+                        break;
+                    case 'select-multiple':
+                        for (j = form.elements[i].options.length - 1; j >= 0; j = j - 1) {
+                            if (form.elements[i].options[j].selected) {
+                                    q.push([form.elements[i].name , encodeURIComponent(form.elements[i].options[j].value)]);
+                            }
+                        }
+                        break;
+                }
+                break;
+            }
+        }
+    return q;
+}
+
+var faker = require('faker');
+
+function test_bulk(){
+  let randomName ; // Rowan Nikolaus
+  let randomEmail ,randomAddr,date; // Kassandra.Haley@erich.biz
+
+  for (var i = 0; i < 1000; i++) {
+randomName = faker.name.firstName();
+randomLName = faker.name.lastName();
+randomAddr = faker.address.streetAddress();
+date = faker.date.past();
+ query("INSERT into eleves(nom,prenom,annee,date_naissance) value('"+randomLName+"','"+randomLName+"','2010','"+date+"')");
+  }
+
+  table.init();
+
+}
+
+
+  </script>
+</html>

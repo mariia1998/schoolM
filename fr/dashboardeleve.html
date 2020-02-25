@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="../node_modules/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/gep.css">
+    <link rel="stylesheet" href="../node_modules/font-awesome/css/font-awesome.min.css">
+    <title>dashboard eleve</title>
+  
+  </head>
+  <body>
+
+    <div class="sidebar">
+    <!-- <input type="text" id="recherche" class="form-control" name="" value="" placeholder="Rechercher.."> -->
+    <div class="" onclick="affichertab('infos')">
+      <h5><i class="fa fa-user"></i> Profile</h5>
+    </div>
+      <hr>
+      <div class="" onclick="affichertab('emploi')">
+        <h4><i class="fa fa-calendar"></i> Emploi du temps</h5>
+      </div>
+        <hr>
+    <div class="" onclick="affichertab('cours')">
+      <h5><i class="fa fa-book"></i> Les cours</h5>
+    </div>
+    <hr>
+    <div class="" onclick="affichertab('examens')">
+      <h5><i class="fa fa-clipboard"></i> Planning des examens</h5>
+    </div>
+    <hr>
+    <div class="" onclick="affichertab('notes')">
+      <h5><i class="fa fa-edit"></i> Les notes</h5>
+    </div>
+    <hr>
+    <div class="" onclick="#">
+      <h5><i class="fa fa-sign-out"></i> Deconnexion</h5>
+    </div>
+
+
+    </div>
+
+
+
+
+    <div class="container-fluid mainBar">
+
+
+      <div class=" infos tab afficher">
+    <div class="row ">
+
+
+      <div class="col col-6">
+      <div class="card  text-white">
+        <div class="card-header" style="color:#1e88e5">
+    <span><i class="fa fa-book"></i></span>
+       MATIERES
+        </div>
+        <div class="card-body  nombreDesSeances" style="background-color:#1e88e5 ">
+          <div class="spinner-border" role="status">  </div>
+        </div>
+      </div>
+      </div>
+
+
+
+
+    <div class="col col-6">
+    <div class="card  text-white " >
+      <div class="card-header" style="color:#66bb6a">
+        <span><i class="fa fa-graduation-cap"></i></span>
+    ETUDIANTS
+      </div>
+      <div class="card-body admin nombreDesEturiants" style="background-color:#66bb6a">
+        <div class="spinner-border" role="status">  </div>
+      </div>
+    </div>
+    </div>
+
+</div>
+
+<div class="row">
+  <div class="col col-12" >
+
+<div class="card">
+  <div class="card-header">
+    Informations
+  </div>
+  <div class="card-body">
+
+
+
+<table class="table table-striped">
+  <tr>
+    <td class="profile" rowspan="9" style="width:210px">  <img src="images/user.png" alt="" class="img-thumbnail "></td>
+    <td>Nom</td>
+    <td>kouachi</td>
+  </tr>
+    <tr>
+      <td>Prenom</td>
+      <td></td>
+    </tr>
+      <tr>
+        <td>Sexe</td>
+        <td></td>
+      </tr>
+        <tr>
+          <td>Année de naissance</td>
+          <td></td>
+        </tr>
+          <tr>
+            <td>Niveau</td>
+            <td></td>
+          </tr>
+          <tr>
+            <td>Groupe</td>
+            <td></td>
+          </tr>
+            <tr>
+              <td>Adresse</td>
+              <td></td>
+            </tr>
+              <tr>
+                <td>Parent</td>
+                <td></td>
+              </tr>
+                <tr>
+                  <td>Téléphone</td>
+                  <td></td>
+                </tr>
+</table>
+
+  </div>
+
+
+
+</div>
+
+
+  </div>
+
+</div>
+    </div>
+
+<div class="cours tab">
+
+
+<table class="table table-bordered table-striped">
+  <thead >
+    <tr>
+      <th>Designation</th>
+      <th>Professeur</th>
+      <th>Date de mise en ligne</th>
+      <th>Action</th>
+
+    </tr>
+  </thead>
+  <tbody >
+
+    <td>cours html</td>
+    <td>maria</td>
+    <td>22-02-2020</td>
+    <td> <i class="fa fa-download"></i> </td>
+
+  </tbody>
+
+</table>
+</div>
+
+<div class="emploi tab ">
+emploi quotidien
+</div>
+<div class="examens tab">
+emploi examens
+</div>
+
+
+<div class="notes tab ">
+
+
+<table class="table table-bordered table-striped">
+  <thead >
+    <tr>
+      <th>Matière</th>
+      <th>Professeur</th>
+      <th>Evaluation</th>
+      <th>Devoir</th>
+      <th>Examen</th>
+      <th>Moyenne</th>
+      <th>Remarque</th>
+      <th>Date</th>
+
+    </tr>
+  </thead>
+  <tbody >
+
+  </tbody>
+
+</table>
+
+
+
+
+
+
+    </div>
+  </body>
+
+  <script src="gep.js" charset="utf-8"></script>
+</html>
