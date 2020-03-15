@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="../node_modules/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/gep.css">
+  <link rel="stylesheet" href="../node_modules/font-awesome/css/font-awesome.min.css">
+<style media="screen">
+  .tab-pane {
+    padding: 10px
+  }
+</style>
+    <title></title>
+  </head>
+  <body>
+    <ul class="nav nav-tabs" id="myTab" role="tablist">
+  <li class="nav-item">
+    <a class="nav-link active" id="home-tab" onclick="tab('home')" href="#home" role="tab" aria-controls="home" aria-selected="true">Home</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" id="profile-tab" onclick="tab('profile')" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Profile</a>
+  </li>
+
+</ul>
+<div class="tab-content" id="myTabContent">
+  <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+
+
+    <table class="table table-striped">
+      <tr>
+        <td class="profile" rowspan="9" style="width:210px">  <img src="images/user.png" alt="" class="img-thumbnail photo-eleve "></td>
+        <td>Nom</td>
+        <td nom></td>
+      </tr>
+        <tr>
+          <td>Prenom</td>
+          <td prenom></td>
+        </tr>
+          <tr>
+            <td>Sexe</td>
+            <td sexe></td>
+          </tr>
+            <tr>
+              <td>Année de naissance</td>
+              <td naissance></td>
+            </tr>
+              <tr>
+                <td>Groupe</td>
+                <td groupe></td>
+              </tr>
+                <tr>
+                  <td>Adresse</td>
+                  <td adresse></td>
+                </tr>
+                  <tr>
+                    <td>Parent</td>
+                    <td parent></td>
+                  </tr>
+                    <tr>
+                      <td>Téléphone</td>
+                      <td tel></td>
+                    </tr>
+    </table>
+
+  </div>
+  <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+
+    <select class="form-control " id='filterbystate' onchange="filterbypresence()">
+      <option  value='-1'>tous</option>
+      <option  value='1'>present</option>
+      <option value='0'>absent</option>
+    </select>
+<br>
+<table id='table' class="table table-striped table-bordered">
+  <thead>
+    <tr>
+      <td>seance</td>
+      <td>debut</td>
+      <td>fin</td>
+      <td>jour</td>
+
+
+    </tr>
+  </thead>
+</table>
+
+  </div>
+</div>
+
+
+  </body>
+  <script src="gep.js" charset="utf-8"></script>
+<script type="text/javascript">
+function tab(el){
+let ul = document.getElementById(el+'-tab') ,div = document.getElementById(el);
+if (document.querySelector('.nav-link.active')) document.querySelector('.nav-link.active').classList.remove('active');
+if (document.querySelector('.tab-pane.show')) {
+document.querySelector('.tab-pane.show').classList.remove('active');
+document.querySelector('.tab-pane.show').classList.remove('show');
+}
+ul.classList.add('active');
+div.classList.add('show');
+div.classList.add('active');
+}
+
+
+var id_eleve = localStorage.ideleve , presence=[] , imgpath = __dirname+'/images/' , photos = ['user.png','girl.png'];
+
+query('SELECT * FROM eleves WHERE id="'+id_eleve+'"',function(data){
+let infos = data[0];
+document.querySelector('.photo-eleve').src = (infos.photo == ''? imgpath+'/'+ photos[parseInt(infos.genre)] :imgpath+'/'+infos.photo);
+document.querySelector('[nom]').innerText = infos.nom;
+document.querySelector('[prenom]').innerText = infos.prenom;
+document.querySelector('[sexe]').innerText = infos.genre;
+document.querySelector('[naissance]').innerText = infos.date_naissance;
+document.querySelector('[adresse]').innerText = infos.adresse;
+document.querySelector('[tel]').innerText = infos.tel;
+document.querySelector('[parent]').innerText = infos.nom_parent;
+document.querySelector('[groupe]').innerText = infos.id_groupe;
+})
+query("SELECT *,(SELECT jour FROM seances WHERE seances.id=presence.id_seance) AS jour,(SELECT debut FROM seances WHERE seances.id=presence.id_seance) AS debut,(SELECT fin FROM seances WHERE seances.id=presence.id_seance) AS fin FROM presence WHERE id_eleve='"+id_eleve+"'",function(pr){
+  presence = pr;
+  filterbypresence();
+});
+
+function filterbypresence(){
+
+let jour=["","lundi","mardi","mercredi","jeudi","Vendredi","Samedi","Dimanche"] ,
+ filterbystate = document.getElementById('filterbystate').value ,
+liste= presence;
+
+if (filterbystate !== '-1') {
+  liste = presence.filter(function(ls){
+
+    return ls.etat == filterbystate;
+
+  })
+ }
+let table = '';
+liste.forEach(function(i){
+table += '<tr data-abs="'+i.etat+'"><td>'+i.debut+'</td><td>'+i.fin+'</td><td>'+jour[parseInt(i.jour)]+'</td></tr>'
+})
+document.getElementById('table').innerHTML=table;
+
+}
+
+</script>
+</html>

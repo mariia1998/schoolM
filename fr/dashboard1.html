@@ -5,7 +5,15 @@
     <link rel="stylesheet" href="../node_modules/bootstrap/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="css/gep.css">
   <link rel="stylesheet" href="../node_modules/font-awesome/css/font-awesome.min.css">
-    <title>dashboard1</title>
+  <style media="screen">
+  tr[data-abs="0"] td {
+background-color:#ef5350;
+color: white;
+
+  }
+  tr[data-abs="0"] td a {color:#000}
+  </style>
+    <title>dashboard admin</title>
   </head>
   <body>
 
@@ -14,15 +22,12 @@
   <hr>
 
     <div class="list-group" style="background-color: : grey ">
-      <a href="#" class="list-group-item list-group-item-action "><span><i class="fa fa-users"></i></span>corp professionnel</a>
-      <a href="#" class="list-group-item list-group-item-action "><span><i class="fa fa-user"></i></span>parents</a>
-      <a href="#" class="list-group-item list-group-item-action "><span><i class="fa fa-clipboard"></i></span>registre des classes</a>
-      <a href="#" class="list-group-item list-group-item-action "><span><i class="fa fa-pencil"></i></span>matieres </a>
-      <a href="#" class="list-group-item list-group-item-action "><span><i class="fa fa-calendar"></i></span>Emploie du temps </a>
-      <a href="#" class="list-group-item list-group-item-action "><span><i class="fa fa-check"></i></span>registre d'abscences</a>
-      <a href="#" class="list-group-item list-group-item-action "><span><i class="fa fa-dollar"></i></span>Recette</a>
-
-      <a href="#" class="list-group-item list-group-item-action list-group-item-dark"><span><i class="fa fa-bell"></i></span>notification</a>
+      <a href="#" class="list-group-item list-group-item-action " onclick="affichertab('corp_prof')"><span><i class="fa fa-users"></i></span>corp professionnel</a>
+      <a href="#" class="list-group-item list-group-item-action " onclick="affichertab('reg-classe ')"><span><i class="fa fa-clipboard"></i></span>registre des classes</a>
+      <a href="#" class="list-group-item list-group-item-action " onclick="affichertab('emploie')"><span><i class="fa fa-calendar"></i></span>Emploie du temps </a>
+      <a href="#" class="list-group-item list-group-item-action " onclick="affichertab('absc')"><span><i class="fa fa-check"></i></span>liste de presence</a>
+      <a href="#" class="list-group-item list-group-item-action " onclick="affichertab('registre')"><span><i class="fa fa-pencil"></i></span>registre d'abscences </a>
+      <a href="#" class="list-group-item list-group-item-action list-group-item-dark" onclick="affichertab('bell')"><span><i class="fa fa-bell"></i></span>notification</a>
     </div>
 
     </div>
@@ -30,9 +35,9 @@
 
 
 
-    <div class="container-fluid" style="padding-left:300px;padding-top:15px">
+    <div class="container-fluid mainBar">
 
-
+<div class=" corp_prof tab afficher">
     <div class="row">
 
 
@@ -58,10 +63,10 @@
     <div class="card  text-white " >
       <div class="card-header" style="color:#66bb6a">
         <span><i class="fa fa-graduation-cap"></i></span>
-    ETUDIANTS
+    ELEVES
       </div>
       <div class="card-body admin nombreDesEtudiants" style="background-color:#66bb6a">
-        <div class="spinner-border" role="status">  </div>
+        <div class="spinner-border" role="status" id="etud">  </div>
       </div>
     </div>
     </div>
@@ -74,7 +79,7 @@
       </div>
 
       <div class="card-body  admin nombreDesProfs" style="background-color:#ffb74d ;">
-        <div class="spinner-border" role="status">  </div>
+        <div class="spinner-border" role="status" id="prof">  </div>
       </div>
 
     </div>
@@ -89,7 +94,7 @@
       </div>
 
       <div class="card-body admin nombreDesGroupes" style="background-color:#FF5252">
-         <div class="spinner-border" role="status">  </div>
+         <div class="spinner-border" role="status" id="grp">  </div>
       </div>
 
     </div>
@@ -115,28 +120,100 @@
 </div>
 </div>
 
+</div>
     </div>
+
+    <div class="tab parent">
+parent
+    </div>
+    <div class="tab reg-classe">
+classe
+    </div>
+
+
+
+    <div class="tab registre">
+      <input type="date" id="filterbydate" name="" value="" class="form-control" onchange="absence.afficherabscence(document.getElementById('filterbygroupes').value)">
+      <br>
+      <select class="form-control" id="filterbygroupes" name="" onchange="absence.afficherabscence( this.value)">
+        </select>
+
+      <br>
+
+  <table class="table table-bordered table-striped" id="liste_abs">
+    <thead>
+
+    </thead>
+    <tbody>
+
+    </tbody>
+  </table>
+    </div>
+
+
+
+
+
+
+    <div class="tab emploie">
+emploie
+    </div>
+    <div class="tab absc">
+
+
+<div class="row">
+<div class="col-6">
+  <select class="custom-select  mb-3" id='filterByGroup' onchange="absence.seances(this.value)" >
+    <option selected>tous</option>
+
+
+  </select>
+</div>
+<div class="col-6">
+<select class="form-control" id="filterbyseance" name="" onchange="absence.eleves(this.value)">
+
+</select>
+</div>
+<div class="col-12">
+<table class="table table-bordered table-selectable table-striped" id="abs">
+
+</table>
+</div>
+</div>
+
+    </div>
+    <div class="tab recette">
+recette
+    </div>
+    <div class="tab bell">
+bell
+    </div>
+
   </body>
 <script src="gep.js" charset="utf-8"></script>
+<script src="dashboard1.js" charset="utf-8"></script>
+
   <script type="text/javascript">
 let Chart = require('chart.js') , moment = require('moment');
+
+document.getElementById('filterbydate').value = moment().format('YYYY-MM-DD');
 
 function mf (m,f){
   var ctx = document.getElementById('myChart');
   var myChart = new Chart(ctx, {
       type: 'pie',
       data: {
-          labels: ['f','m'],
+          labels: [ 'm','f'],
           datasets: [{
               label: '# of Votes',
               data: [m, f],
               backgroundColor: [
-                  'rgba(255, 99, 132, 0.2)',
                   'rgba(0, 64, 255, 1)',
+                  'rgba(255, 99, 132, 0.2)',
               ],
               borderColor: [
-                  'rgba(255, 99, 132, 1)',
                   'rgba(54, 162, 235, 1)',
+                  'rgba(255, 99, 132, 1)',
               ],
               borderWidth: 1
           }]
@@ -200,11 +277,33 @@ console.log(te);
 
     query("SELECT COUNT(id) AS tot  from seances  ",function(d){
       console.log(d);
-      document.getElementById('tot').outerHTML='<h5 align="left"> total:'+d[0].tot+'</h5>';
+      document.getElementById('tot').outerHTML='<h5 align="left">'+d[0].tot+'</h5>';
 
     })
 
+    query("SELECT COUNT(id) AS tot  from groupes  ",function(d){
+      console.log(d);
+      document.getElementById('grp').outerHTML='<h5 align="left">'+d[0].tot+'</h5>';
 
+    })
+//
+    query("SELECT COUNT(id) AS tot  from eleves  ",function(d){
+      console.log(d);
+      document.getElementById('etud').outerHTML='<h5 align="left">'+d[0].tot+'</h5>';
+
+    })
+
+    query("SELECT COUNT(id) AS tot  from prof  ",function(d){
+      console.log(d);
+      document.getElementById('prof').outerHTML='<h5 align="left">'+d[0].tot+'</h5>';
+
+    })
+    query("SELECT genre from eleves",function(d){
+let m = d.filter(function(e){return e.genre == '0'})
+let f = d.filter(function(e){return e.genre == '1'})
+mf(m.length,f.length)
+    })
+     // query("SELECT COUNT(genre) AS fille from eleves where genre = '1'")
 
 
 

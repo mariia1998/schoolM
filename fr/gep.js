@@ -19,6 +19,11 @@ function closewin (){
 }
 
 
+infoeleve = function(x){
+  localStorage.ideleve = x;
+window.open('info_el.html');
+}
+
 var errors = {
     'ECONNREFUSED':'mysql stopped' ,
     'ER_BAD_DB_ERROR':'DB not exist' ,

@@ -27,6 +27,18 @@
 
         <tbody>
           <tr>
+            <td>image</td>
+            <td>
+             <div class="form-group">
+                <label for="image">Example file input</label>
+                <input type="file" class="form-control-file" name="image" onchange="changerPic()">
+                 </div>
+           </td>
+             <td class="profile" rowspan="3" style="width:210px">  <img src="images/user.png" alt="" class="img-thumbnail photo-eleve "></td>
+             <td> <a class="btn btn-danger"   href="javascript:changerPic(true)"><i class=" fa fa-trash"></i></a> </td>
+          </tr>
+          <input type="hidden" name="photo" value="">
+          <tr>
             <td>nom</td>
             <td>  <input type="text" class="form-control" name="nom"  placeholder="nom"></td>
           </tr>
@@ -56,8 +68,15 @@
           </tr><tr>
             <td>groupe</td>
             <td><select class="form-control" name="id_groupe">
-              <option value="0">grp1</option>
 
+
+            </select></td>
+              </tr>
+          <tr>
+           <td>Genre</td>
+         <td><select class="form-control" name="genre">
+              <option value="0">garçon</option>
+                <option value="1">fille</option>
             </select></td>
           </tr>
         </tbody>
@@ -98,7 +117,12 @@
   <option value="2">Two</option>
   <option value="3">Three</option>
 </select>
-
+<br>
+<br>
+<select class="custom-select form-control" id="filterBygender">
+  <option value="0">Garçon</option>
+  <option value="1">Femme</option>
+</select>
 <hr>
 
 <button type="button" name="button" onclick="table.idact=0;document.querySelector('.win').classList.toggle('afficher')" class="btn btn-block btn-primary"><i class="fa fa-plus"></i></button>
@@ -121,7 +145,8 @@
       <th>adresse</th>
       <th>Telephone</th>
       <th>parent</th>
-        <th>Groupe</th>
+      <th>Groupe</th>
+        <th>Genre</th>
     </tr>
   </thead>
   <tbody id="res">
@@ -133,8 +158,17 @@
   </body>
   <script src="gep.js" charset="utf-8"></script>
   <script type="text/javascript">
-  let obj = ['nom','prenom','annee','date_naissance','adresse','tel','nom_parent','id_groupe'];
+  let obj = ['nom','prenom','annee','date_naissance','adresse','tel','nom_parent','id_groupe','genre'];
  // table.init("eleves",'res','recherche',obj)
+query("SELECT * FROM groupes ",function(grp){
+  console.log(grp);
+  let opt = [];
+  grp.forEach(function(groupe){
+    opt.push(`<option value="${groupe.id}">${groupe.nom} - ${groupe.annee}</option>`);
+  })
+  console.log(opt);
+  document.querySelector('[name="id_groupe"]').innerHTML = opt.join('');
+})
 
  table.init({
    nom_table : 'eleves',
@@ -147,6 +181,7 @@ editer : 'editer' ,
 filters : [
   {id:'filterBygroup',name:'id_groupe'},
   {id:'filterByyear',name:'annee'},
+    {id:'filterBygender',name:'genre'},
 ]
 });
 
@@ -156,8 +191,20 @@ filters : [
 
 document.querySelector('.add').addEventListener('submit',function(e){
 e.preventDefault();
-let form = this;
-var data = serialize(form);
+let picture = document.querySelector('[name="photo"]');
+let form = this ,file = document.querySelector('[name="image"]').files ;
+
+if (file.length > 0) {
+  let filename =  Math.round(Math.random() *  1000000000) + '.jpg';
+ let target = __dirname+'/images/'+filename;
+picture.value = filename;
+  copyFile(file[0].path, target, function(){
+    // console.log(target,file[0].path);
+  })
+}
+
+
+let data = serialize(form);
 console.log(data);
 let keys =[] , values =[], update=[];
 data.forEach(function(x){
@@ -250,18 +297,64 @@ function serialize (form) {
     return q;
 }
 
+const fs = require('fs');
+
+
+
+
+
+function copyFile(source, target, cb) {
+  var cbCalled = false;
+
+  var rd = fs.createReadStream(source);
+  rd.on("error", function(err) {
+    done(err);
+  });
+  var wr = fs.createWriteStream(target);
+  wr.on("error", function(err) {
+    done(err);
+  });
+  wr.on("close", function(ex) {
+    done();
+  });
+  rd.pipe(wr);
+
+  function done(err) {
+    if (!cbCalled) {
+      cb(err);
+      cbCalled = true;
+    }
+  }
+}
+
+function changerPic(supp) {
+console.log(supp);
+let imgPath = __dirname+'/images/', image =document.querySelector('[name="image"]').files;
+if (supp) image = [];
+console.log(image.length );
+if (image.length > 0) {
+  document.querySelector('.photo-eleve').src  = image[0].path;
+} else {
+  document.querySelector('.photo-eleve').src  = __dirname+'/images/user.png';
+  console.log(document.querySelector('.photo-eleve'));
+}
+}
+
 var faker = require('faker');
 
-function test_bulk(){
+function test_bulk(n){
   let randomName ; // Rowan Nikolaus
-  let randomEmail ,randomAddr,date; // Kassandra.Haley@erich.biz
+  let randomEmail ,randomAddr,date,gender; // Kassandra.Haley@erich.biz
 
-  for (var i = 0; i < 1000; i++) {
+  for (var i = 0; i < n; i++) {
 randomName = faker.name.firstName();
+
 randomLName = faker.name.lastName();
 randomAddr = faker.address.streetAddress();
 date = faker.date.past();
- query("INSERT into eleves(nom,prenom,annee,date_naissance) value('"+randomLName+"','"+randomLName+"','2010','"+date+"')");
+gender = Math.random();
+gender = (gender >= 0.3 ? '1':'0');
+ query("INSERT into eleves(nom,prenom,annee,date_naissance,genre) value('"+randomLName+"','"+randomLName+"','2010','"+date+"','"+gender+"')");
   }
 
   table.init();
