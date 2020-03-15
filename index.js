@@ -62,6 +62,7 @@ const templatefr = [
       { label: 'Dashboard',click(){mainWindow.loadFile('fr/dashboardeleve.html')}},
       { label: 'Dashboardadmin',click(){mainWindow.loadFile('fr/dashboard1.html')}},
       { label: 'Dashboardprof',click(){mainWindow.loadFile('fr/dashboardprof.html')}},
+      { label: 'info',click(){mainWindow.loadFile('fr/info_el.html')}},
 
       { type: 'separator' },
       {label:'Clients list' ,click(){
